@@ -34,6 +34,7 @@
 	},
 	"homepage": "https://github.com/TobiasFaller/vscode-vt100-syntax-highlight",
 	"activationEvents": [
+		"onLanguage:rust",
 		"onLanguage:vt100",
 		"onCommand:vt100.showPreview",
 		"onCommand:vt100.showPreviewToSide",

@@ -64,7 +64,7 @@ export class DecorationManager implements vscode.Disposable {
 		const promises: Promise<void>[] = [];
 
 		for (const editor of editors) {
-			if (editor != null && editor.document.languageId === 'vt100') {
+			if (editor != null && (editor.document.languageId === 'rust' || editor.document.languageId === 'vt100')) {
 				promises.push(this._decorator.apply(editor));
 			}
 		}
@@ -94,7 +94,7 @@ export class DecorationManager implements vscode.Disposable {
 				continue;
 			}
 
-			if (editor.document.languageId === 'vt100') {
+			if (editor.document.languageId === 'rust' || editor.document.languageId === 'vt100') {
 				promises.push(this._decorator.apply(editor));
 			} else {
 				promises.push(this._decorator.remove(editor));
@@ -178,8 +178,12 @@ class EditorDecorator {
 			backgroundColor = <string> context.get('background-color');
 		}
 
-		appliedDecorations.get('background-color-' + backgroundColor)!.push(range);
-		appliedDecorations.get('foreground-color-' + foregroundColor)!.push(range);
+        if (backgroundColor != 'default') {
+            appliedDecorations.get('background-color-' + backgroundColor)!.push(range);
+        }
+        if (foregroundColor != 'default') {
+            appliedDecorations.get('foreground-color-' + foregroundColor)!.push(range);
+        }
 
 		for (const attribute of ['bold', 'dim', 'underlined', 'blink', 'inverted', 'hidden']) {
 			if (context.get(attribute) === 'yes') {
